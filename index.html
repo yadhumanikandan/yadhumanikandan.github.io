@@ -1,30 +1,121 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&display=swap"
-   rel="stylesheet">
-  <link href="styles/all.css" rel="stylesheet">
-  <link rel="stylesheet" href="styles/main.css">
-  <title>Yadhukrishnan</title>
-</head>
-<body>
-  <div class="container">
-    <div class="menu">
-      <div class="buttons-flex">
-      <div class="button red"></div>
-      <div class="button yellow"></div>
-      <div class="button green"></div>
-    </div>
-    <div class="title">
-      <a href="https://github.com/yadhumanikandan" target="_blank"><h1><i class='fab fa-github'></i> github.com/yadhumanikandan</h1></a>
-    </div>
-    </div>
-    <div id="app">
-    </div>
-  </div>
+	<title>Yadhu Manikandan</title>
+	<!-- css files -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
+	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
 
-  <script src="scripts/main.js"></script>  
-</body>
+	<!-- <link rel="icon" type="image/x-icon" href="assets/img/favicon.png"> -->
+	<meta name="author" content="Yadhumanikandan">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+	<body>
+		<!-- Navbar -->
+		<nav class="nav container void-background">
+			<!-- This "nav-menu" is hidden on mobile -->
+			<!-- Add the modifier "is-active" to display it on mobile -->
+			<div class="nav-left">
+				<a href="http://github.com/yadhumanikandan" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-github"></i>
+					</span>
+				</a>
+				<a href="https://twitter.com/yadhumanikandan" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-twitter"></i>
+					</span>
+				</a>	
+				<a href="https://www.linkedin.com/in/yadhukrishnan-m-m-09117a224/" class="nav-item">
+					<span class="icon">
+						<i class="fa fa-linkedin"></i>
+					</span>
+				</a>				
+			</div>
+
+			<div class="nav-right nav-menu">
+				<a class="nav-item" href="/terminal/">Terminal</a>
+				<a class="nav-item" href="#about">About</a>
+				<a class="nav-item" href="#projects">Projects</a>
+			</div>
+
+			<!-- This "nav-toggle" hamburger menu is only visible on mobile -->
+			<!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
+			<span class="nav-toggle">
+				<span></span>
+				<span></span>
+				<span></span>
+			</span>
+		</nav>
+				
+		<!-- About Me -->
+		<section id="about" class="section section-1">
+			<div class="container has-text-centered">
+				<!-- Source: https://flic.kr/p/pAZBNK -->
+				<img class="avatar" src="assets/img/profile.JPG">
+			</div>
+			<div class="container"></br>
+				<p class="intro">
+					<h1  class="title is-3">Hi, I am Yadhukrishnan</h1>
+					Passionate Cybersecurity Professional with a fervent dedication to the dynamic world of hacking and cyber defense. Equipped with a comprehensive home lab for immersive hands-on experimentation, actively engaging with platforms such as Hack The Box and TryHackMe. Proficient in leveraging skills to contribute to bug bounty programs on HackerOne and Bugcrowd, showcasing a steadfast commitment to fortifying digital security. Driven by the pursuit of new challenges, I am eager to continually enhance my expertise and make impactful contributions to the field of cybersecurity.
+				</p>
+			</div>
+		</section>
+		
+		<!-- Projects -->
+		<section  id="projects" class="section section-2">
+			<div class="container">
+				<div class="has-text-centered">
+					<h3 class="title is-3">Projects</h3>
+				</div>
+				
+				<div class="columns is-multiline is-desktop">
+					<!-- Project 1 -->
+					<a href="https://github.com/yadhumanikandan/fake-HID-device-detector"><div class="column">
+						<div class="box project-text">
+							<article>
+								<div>
+									<figure class="image project-figure">
+										<img src="assets/img/project-1.jpg" alt="Image">
+									</figure>
+								</div>
+								<div>
+									<h2 style="color: rgb(119, 255, 57);">FAKE HID DEVICE DETECTION</h2>			
+									<p style="color: aliceblue;">
+										A software that detects fake human interface devices like USB Rubber Ducky.
+									</p>
+								</div>
+							</article>
+						</div>
+					</div></a>
+					<!-- Project 2 -->
+					<a href="https://github.com/yadhumanikandan/esp8266-wifi-hacking-device"><div class="column">
+						<div class="box project-text">
+							<article>
+								<div>
+									<figure class="image project-figure">
+										<img src="assets/img/project-2.jpg" alt="Image">
+									</figure>
+								</div>
+								<div>
+									<h2 style="color: rgb(119, 255, 57);">ESP8266 WIFI HACKING DEVICE</h2>			
+									<p style="color: aliceblue;">
+										All in one portable wifi hacking ESP8266 module with many wireless attacks. 
+									</p>
+								</div>
+							</article>
+						</div>
+					</div></a>
+				</div>
+			</div>
+		</section>
+
+		<footer>
+			© yadhukrishnan M M 2024 All Rights Reserved.
+		</footer>
+		
+		<!-- Scripts  -->
+		<script src="controller.js"></script>		
+	</body>	
 </html>
