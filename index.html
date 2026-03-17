@@ -1,121 +1,1724 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-	<title>Yadhu Manikandan</title>
-	<!-- css files -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YADHUKRISHNAN MANIKANDAN — Mission Control</title>
+<meta name="description" content="Yadhukrishnan Manikandan — Network & Security Engineer, AWS Certified Solutions Architect, IT Infrastructure.">
+<meta name="author" content="Yadhukrishnan Manikandan">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-	<!-- <link rel="icon" type="image/x-icon" href="assets/img/favicon.png"> -->
-	<meta name="author" content="Yadhumanikandan">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+:root {
+  --bg-deep: #0a0a0f;
+  --bg-panel: #0d0d14;
+  --bg-panel-hover: #111119;
+  --border-dim: #1a1a2e;
+  --border-glow: #2a6fff;
+  --accent-blue: #4a9eff;
+  --accent-blue-bright: #6db3ff;
+  --accent-amber: #c8893a;
+  --accent-amber-dim: #8a6030;
+  --accent-amber-bright: #e8a84c;
+  --text-primary: #d0d8e8;
+  --text-secondary: #7a8599;
+  --text-dim: #4a5568;
+  --text-label: #5a7599;
+  --mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --scanline-opacity: 0.03;
+  --glow-spread: 0 0 20px rgba(74, 158, 255, 0.08);
+}
+
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-dim) var(--bg-deep);
+}
+
+body {
+  font-family: var(--sans);
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+/* ═══════════════════════════════════════════════════
+   SCANLINE OVERLAY
+   ═══════════════════════════════════════════════════ */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 2px,
+    rgba(0, 0, 0, var(--scanline-opacity)) 4px
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   STAR FIELD CANVAS
+   ═══════════════════════════════════════════════════ */
+#starfield {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ═══════════════════════════════════════════════════
+   GRID OVERLAY
+   ═══════════════════════════════════════════════════ */
+.grid-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(74, 158, 255, 0.015) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74, 158, 255, 0.015) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* ═══════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════ */
+.main-content {
+  position: relative;
+  z-index: 1;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 100px 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   NAV
+   ═══════════════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.nav-brand {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-blue);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.nav-brand span {
+  color: var(--text-dim);
+}
+
+.nav-links {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding: 6px 12px;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-blue);
+  background: rgba(74, 158, 255, 0.06);
+}
+
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text-secondary);
+  transition: all 0.3s ease;
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION HEADERS (PANEL LABELS)
+   ═══════════════════════════════════════════════════ */
+.section-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent-amber);
+  margin-bottom: 48px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '//';
+  color: var(--text-dim);
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent-amber-dim), transparent);
+}
+
+/* ═══════════════════════════════════════════════════
+   PANELS (MODULE BOXES)
+   ═══════════════════════════════════════════════════ */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s ease;
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.panel:hover::before {
+  opacity: 0.6;
+}
+
+.panel:hover {
+  border-color: rgba(74, 158, 255, 0.2);
+  box-shadow: var(--glow-spread);
+}
+
+.panel-header {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-label);
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-header .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  animation: pulse-dot 3s ease-in-out infinite;
+}
+
+.panel-header .dot.amber {
+  background: var(--accent-amber);
+  animation-delay: 1s;
+}
+
+.panel-body {
+  padding: 20px;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════════════ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 56px;
+  position: relative;
+}
+
+.hero-content {
+  text-align: center;
+  max-width: 800px;
+}
+
+.hero-prefix {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.hero-prefix .blink {
+  animation: blink 1.2s step-end infinite;
+}
+
+.hero-name {
+  font-family: var(--sans);
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 700;
+  letter-spacing: -1px;
+  line-height: 1.05;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-blue-bright) 50%, var(--text-primary) 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 8s ease infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.hero-title {
+  font-family: var(--mono);
+  font-size: clamp(12px, 1.6vw, 15px);
+  font-weight: 400;
+  color: var(--text-secondary);
+  letter-spacing: 1px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.hero-tagline {
+  font-family: var(--mono);
+  font-size: clamp(14px, 2vw, 18px);
+  color: var(--accent-blue);
+  min-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.hero-tagline .cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background: var(--accent-blue);
+  animation: blink 0.8s step-end infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.hero-status {
+  margin-top: 48px;
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.status-item {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.status-item .val {
+  color: var(--accent-amber);
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.scroll-indicator span {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.scroll-arrow {
+  width: 16px;
+  height: 16px;
+  border-right: 1px solid var(--text-dim);
+  border-bottom: 1px solid var(--text-dim);
+  transform: rotate(45deg);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ═══════════════════════════════════════════════════
+   ABOUT
+   ═══════════════════════════════════════════════════ */
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.about-text {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.85;
+}
+
+.about-text strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.about-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meta-row {
+  display: flex;
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 10px 16px;
+  background: rgba(74, 158, 255, 0.03);
+  border-left: 2px solid var(--border-dim);
+  transition: all 0.3s ease;
+}
+
+.meta-row:hover {
+  border-left-color: var(--accent-blue);
+  background: rgba(74, 158, 255, 0.06);
+}
+
+.meta-key {
+  color: var(--text-dim);
+  min-width: 110px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 10px;
+  align-self: center;
+}
+
+.meta-val {
+  color: var(--text-primary);
+}
+
+/* ═══════════════════════════════════════════════════
+   SKILLS
+   ═══════════════════════════════════════════════════ */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.skill-module {
+  padding: 20px;
+}
+
+.skill-module .panel-header {
+  padding: 0 0 14px 0;
+}
+
+.skill-module .panel-body {
+  padding: 14px 0 0 0;
+}
+
+.skill-category {
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent-blue);
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  background: rgba(74, 158, 255, 0.06);
+  border: 1px solid rgba(74, 158, 255, 0.12);
+  border-radius: 3px;
+  color: var(--text-secondary);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+.skill-tag:hover {
+  background: rgba(74, 158, 255, 0.12);
+  border-color: rgba(74, 158, 255, 0.3);
+  color: var(--accent-blue-bright);
+  box-shadow: 0 0 12px rgba(74, 158, 255, 0.08);
+}
+
+.skill-bar {
+  height: 2px;
+  background: var(--border-dim);
+  margin-top: 14px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-blue), var(--accent-amber));
+  border-radius: 1px;
+  width: 0%;
+  transition: width 1.5s ease;
+}
+
+/* ═══════════════════════════════════════════════════
+   PROJECTS
+   ═══════════════════════════════════════════════════ */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.project-card .panel {
+  height: 100%;
+}
+
+.project-id {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--accent-amber-dim);
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.project-name {
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+
+.project-card:hover .project-name {
+  color: var(--accent-blue-bright);
+}
+
+.project-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 16px;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.project-tech span {
+  font-family: var(--mono);
+  font-size: 10px;
+  padding: 3px 10px;
+  background: rgba(200, 137, 58, 0.08);
+  border: 1px solid rgba(200, 137, 58, 0.15);
+  border-radius: 2px;
+  color: var(--accent-amber);
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════════
+   EXPERIENCE / TIMELINE
+   ═══════════════════════════════════════════════════ */
+.timeline {
+  position: relative;
+  padding-left: 32px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: linear-gradient(180deg, var(--accent-blue), var(--border-dim));
+}
+
+.timeline-entry {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.timeline-entry:last-child {
+  margin-bottom: 0;
+}
+
+.timeline-entry::before {
+  content: '';
+  position: absolute;
+  left: -36px;
+  top: 8px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 2px solid var(--accent-blue);
+  background: var(--bg-deep);
+  z-index: 1;
+}
+
+.timeline-entry:first-child::before {
+  background: var(--accent-blue);
+  box-shadow: 0 0 12px rgba(74, 158, 255, 0.4);
+}
+
+.timeline-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--accent-amber-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.timeline-role {
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.timeline-org {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--accent-blue);
+  margin-bottom: 8px;
+}
+
+.timeline-location {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════════
+   CERTIFICATIONS
+   ═══════════════════════════════════════════════════ */
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.cert-badge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.cert-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--accent-amber-dim);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent-amber);
+  background: rgba(200, 137, 58, 0.05);
+}
+
+.cert-info h4 {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.cert-info p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════════
+   EDUCATION
+   ═══════════════════════════════════════════════════ */
+.education-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.edu-badge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+}
+
+.edu-icon {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--accent-blue);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  background: rgba(74, 158, 255, 0.05);
+}
+
+.edu-info h4 {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.edu-info p {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.5px;
+}
+
+/* ═══════════════════════════════════════════════════
+   GITHUB ACTIVITY
+   ═══════════════════════════════════════════════════ */
+.github-panel .panel-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.github-graph {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 8px 0;
+}
+
+.github-graph svg {
+  display: block;
+  margin: 0 auto;
+}
+
+.github-stats {
+  display: flex;
+  gap: 32px;
+  margin-top: 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.github-stats .stat-val {
+  color: var(--accent-blue);
+  font-size: 13px;
+}
+
+.github-loading {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  padding: 20px 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   CONTACT
+   ═══════════════════════════════════════════════════ */
+.contact-terminal {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  max-width: 640px;
+}
+
+.terminal-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border-dim);
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid var(--border-dim);
+}
+
+.terminal-dot.r { border-color: #ff5f56; background: rgba(255, 95, 86, 0.2); }
+.terminal-dot.y { border-color: #ffbd2e; background: rgba(255, 189, 46, 0.2); }
+.terminal-dot.g { border-color: #27c93f; background: rgba(39, 201, 63, 0.2); }
+
+.terminal-title {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-left: 8px;
+  letter-spacing: 0.5px;
+}
+
+.terminal-body {
+  padding: 20px 24px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 2.2;
+}
+
+.terminal-line {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+
+.terminal-prompt {
+  color: var(--accent-blue);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.terminal-line a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+  word-break: break-all;
+}
+
+.terminal-line a:hover {
+  color: var(--accent-blue-bright);
+}
+
+.terminal-label {
+  color: var(--accent-amber-dim);
+  min-width: 70px;
+  display: inline-block;
+}
+
+.terminal-cursor-line {
+  margin-top: 8px;
+  color: var(--text-dim);
+}
+
+.terminal-cursor-line .cursor {
+  display: inline-block;
+  width: 8px;
+  height: 15px;
+  background: var(--accent-blue);
+  animation: blink 0.8s step-end infinite;
+  vertical-align: middle;
+  margin-left: 4px;
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════════════ */
+footer {
+  padding: 40px 0;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  border-top: 1px solid var(--border-dim);
+}
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL
+   ═══════════════════════════════════════════════════ */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0; right: 0;
+    flex-direction: column;
+    background: rgba(10, 10, 15, 0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--border-dim);
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .nav-toggle {
+    display: flex;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-status {
+    gap: 16px;
+  }
+
+  section {
+    padding: 64px 0;
+  }
+
+  .certs-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .education-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 0 16px;
+  }
+
+  .hero-name {
+    font-size: 36px;
+  }
+
+  .hero-title {
+    font-size: 11px;
+  }
+
+  .project-card .panel-body {
+    padding: 16px;
+  }
+}
+</style>
 </head>
-	<body>
-		<!-- Navbar -->
-		<nav class="nav container void-background">
-			<!-- This "nav-menu" is hidden on mobile -->
-			<!-- Add the modifier "is-active" to display it on mobile -->
-			<div class="nav-left">
-				<a href="http://github.com/yadhumanikandan" class="nav-item">
-					<span class="icon">
-						<i class="fa fa-github"></i>
-					</span>
-				</a>
-				<a href="https://twitter.com/yadhumanikandan" class="nav-item">
-					<span class="icon">
-						<i class="fa fa-twitter"></i>
-					</span>
-				</a>	
-				<a href="https://www.linkedin.com/in/yadhukrishnan-m-m-09117a224/" class="nav-item">
-					<span class="icon">
-						<i class="fa fa-linkedin"></i>
-					</span>
-				</a>				
-			</div>
+<body>
 
-			<div class="nav-right nav-menu">
-				<a class="nav-item" href="/terminal/">Terminal</a>
-				<a class="nav-item" href="#about">About</a>
-				<a class="nav-item" href="#projects">Projects</a>
-			</div>
+<!-- ═══════════════════════ STARFIELD ═══════════════════════ -->
+<canvas id="starfield"></canvas>
+<div class="grid-overlay"></div>
 
-			<!-- This "nav-toggle" hamburger menu is only visible on mobile -->
-			<!-- You need JavaScript to toggle the "is-active" class on "nav-menu" -->
-			<span class="nav-toggle">
-				<span></span>
-				<span></span>
-				<span></span>
-			</span>
-		</nav>
-				
-		<!-- About Me -->
-		<section id="about" class="section section-1">
-			<div class="container has-text-centered">
-				<!-- Source: https://flic.kr/p/pAZBNK -->
-				<img class="avatar" src="assets/img/profile.JPG">
-			</div>
-			<div class="container"></br>
-				<p class="intro">
-					<h1  class="title is-3">Hi, I am Yadhukrishnan</h1>
-					Passionate Cybersecurity Professional with a fervent dedication to the dynamic world of hacking and cyber defense. Equipped with a comprehensive home lab for immersive hands-on experimentation, actively engaging with platforms such as Hack The Box and TryHackMe. Proficient in leveraging skills to contribute to bug bounty programs on HackerOne and Bugcrowd, showcasing a steadfast commitment to fortifying digital security. Driven by the pursuit of new challenges, I am eager to continually enhance my expertise and make impactful contributions to the field of cybersecurity.
-				</p>
-			</div>
-		</section>
-		
-		<!-- Projects -->
-		<section  id="projects" class="section section-2">
-			<div class="container">
-				<div class="has-text-centered">
-					<h3 class="title is-3">Projects</h3>
-				</div>
-				
-				<div class="columns is-multiline is-desktop">
-					<!-- Project 1 -->
-					<a href="https://github.com/yadhumanikandan/fake-HID-device-detector"><div class="column">
-						<div class="box project-text">
-							<article>
-								<div>
-									<figure class="image project-figure">
-										<img src="assets/img/project-1.jpg" alt="Image">
-									</figure>
-								</div>
-								<div>
-									<h2 style="color: rgb(119, 255, 57);">FAKE HID DEVICE DETECTION</h2>			
-									<p style="color: aliceblue;">
-										A software that detects fake human interface devices like USB Rubber Ducky.
-									</p>
-								</div>
-							</article>
-						</div>
-					</div></a>
-					<!-- Project 2 -->
-					<a href="https://github.com/yadhumanikandan/esp8266-wifi-hacking-device"><div class="column">
-						<div class="box project-text">
-							<article>
-								<div>
-									<figure class="image project-figure">
-										<img src="assets/img/project-2.jpg" alt="Image">
-									</figure>
-								</div>
-								<div>
-									<h2 style="color: rgb(119, 255, 57);">ESP8266 WIFI HACKING DEVICE</h2>			
-									<p style="color: aliceblue;">
-										All in one portable wifi hacking ESP8266 module with many wireless attacks. 
-									</p>
-								</div>
-							</article>
-						</div>
-					</div></a>
-				</div>
-			</div>
-		</section>
+<!-- ═══════════════════════ NAV ═══════════════════════ -->
+<nav>
+  <div class="nav-brand">YM<span> // MISSION CTRL</span></div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Systems</a></li>
+    <li><a href="#projects">Missions</a></li>
+    <li><a href="#experience">Log</a></li>
+    <li><a href="#credentials">Credentials</a></li>
+    <li><a href="#github">Activity</a></li>
+    <li><a href="#contact">Comms</a></li>
+  </ul>
+  <div class="nav-toggle" id="navToggle" role="button" aria-label="Toggle navigation" tabindex="0">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
 
-		<footer>
-			© yadhukrishnan M M 2024 All Rights Reserved.
-		</footer>
-		
-		<!-- Scripts  -->
-		<script src="controller.js"></script>		
-	</body>	
+<div class="main-content">
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-prefix">
+      <span class="blink">&gt;</span> sys.operator.init
+    </div>
+    <h1 class="hero-name">Yadhukrishnan Manikandan</h1>
+    <p class="hero-title">
+      Network &amp; Security Engineer &nbsp;|&nbsp; AWS Certified &nbsp;|&nbsp; IT Infrastructure &nbsp;|&nbsp; Cloud, Virtualization &amp; Deployment
+    </p>
+    <div class="hero-tagline">
+      <span id="typewriter"></span><span class="cursor"></span>
+    </div>
+    <div class="hero-status">
+      <div class="status-item">Location: <span class="val">Dubai, UAE</span></div>
+      <div class="status-item">Status: <span class="val">Operational</span></div>
+      <div class="status-item">Uptime: <span class="val" id="uptime">calculating...</span></div>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ ABOUT ═══════════════════════ -->
+<section id="about">
+  <div class="container">
+    <div class="section-label reveal">Operator Profile</div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          Network and Security Engineer based in <strong>Dubai</strong> with a strong foundation in IT infrastructure, cloud architecture, and cybersecurity. I specialize in designing and managing secure, scalable systems — from <strong>Windows Server</strong> environments and <strong>VMware</strong> virtualization to <strong>Fortinet</strong> security appliances and <strong>Cloudflare</strong> DNS.
+        </p>
+        <br>
+        <p>
+          I hold an <strong>AWS Certified Solutions Architect – Associate</strong> certification and a BSc in Cyber Forensics. I actively explore emerging technologies including local AI deployment, automation workflows, and <strong>MCP integrations</strong> — bridging the gap between traditional IT operations and modern AI-assisted workflows to drive efficiency and resilience across infrastructure.
+        </p>
+      </div>
+      <div class="about-meta reveal">
+        <div class="meta-row">
+          <span class="meta-key">Callsign</span>
+          <span class="meta-val">Yadhukrishnan Manikandan</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Base</span>
+          <span class="meta-val">Dubai, United Arab Emirates</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Focus</span>
+          <span class="meta-val">Network & Security Engineering</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Clearance</span>
+          <span class="meta-val">AWS Solutions Architect – Associate</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-key">Status</span>
+          <span class="meta-val" style="color: var(--accent-blue);">● Active</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ SKILLS ═══════════════════════ -->
+<section id="skills">
+  <div class="container">
+    <div class="section-label reveal">System Status</div>
+    <div class="skills-grid">
+
+      <div class="panel skill-module reveal">
+        <div class="panel-header">
+          <span class="dot"></span> Networks &amp; Security
+        </div>
+        <div class="panel-body">
+          <div class="skill-tags">
+            <span class="skill-tag">Fortinet</span>
+            <span class="skill-tag">Cloudflare</span>
+            <span class="skill-tag">DNS Management</span>
+            <span class="skill-tag">TCP/IP</span>
+            <span class="skill-tag">VLANs</span>
+            <span class="skill-tag">Firewalls</span>
+            <span class="skill-tag">VPN</span>
+            <span class="skill-tag">Routing</span>
+            <span class="skill-tag">Switching</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-width="92"></div></div>
+        </div>
+      </div>
+
+      <div class="panel skill-module reveal">
+        <div class="panel-header">
+          <span class="dot"></span> Cloud &amp; AWS
+        </div>
+        <div class="panel-body">
+          <div class="skill-tags">
+            <span class="skill-tag">EC2</span>
+            <span class="skill-tag">S3</span>
+            <span class="skill-tag">VPC</span>
+            <span class="skill-tag">Route 53</span>
+            <span class="skill-tag">IAM</span>
+            <span class="skill-tag">CloudFront</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-width="88"></div></div>
+        </div>
+      </div>
+
+      <div class="panel skill-module reveal">
+        <div class="panel-header">
+          <span class="dot"></span> Virtualization &amp; Servers
+        </div>
+        <div class="panel-body">
+          <div class="skill-tags">
+            <span class="skill-tag">VMware vSphere</span>
+            <span class="skill-tag">VMware ESXi</span>
+            <span class="skill-tag">Windows Server</span>
+            <span class="skill-tag">IIS</span>
+            <span class="skill-tag">Active Directory</span>
+            <span class="skill-tag">Linux</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-width="90"></div></div>
+        </div>
+      </div>
+
+      <div class="panel skill-module reveal">
+        <div class="panel-header">
+          <span class="dot amber"></span> Web &amp; Deployment
+        </div>
+        <div class="panel-body">
+          <div class="skill-tags">
+            <span class="skill-tag">Nginx</span>
+            <span class="skill-tag">Docker</span>
+            <span class="skill-tag">IIS</span>
+            <span class="skill-tag">ASP.NET</span>
+            <span class="skill-tag">Cloudflare Pages</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-width="85"></div></div>
+        </div>
+      </div>
+
+      <div class="panel skill-module reveal">
+        <div class="panel-header">
+          <span class="dot"></span> AI Integration
+        </div>
+        <div class="panel-body">
+          <div class="skill-tags">
+            <span class="skill-tag">Local AI Deployment</span>
+            <span class="skill-tag">Automation Workflows</span>
+            <span class="skill-tag">MCP Integrations</span>
+            <span class="skill-tag">Docker</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-width="78"></div></div>
+        </div>
+      </div>
+
+      <div class="panel skill-module reveal">
+        <div class="panel-header">
+          <span class="dot amber"></span> Databases &amp; Systems
+        </div>
+        <div class="panel-body">
+          <div class="skill-tags">
+            <span class="skill-tag">MS SQL Server</span>
+            <span class="skill-tag">PostgreSQL</span>
+            <span class="skill-tag">Odoo ERP</span>
+            <span class="skill-tag">Yeastar PBX</span>
+          </div>
+          <div class="skill-bar"><div class="skill-bar-fill" data-width="80"></div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ PROJECTS ═══════════════════════ -->
+<section id="projects">
+  <div class="container">
+    <div class="section-label reveal">Mission Files</div>
+    <div class="projects-grid">
+
+      <a class="project-card reveal" href="https://musiciantheory.com" target="_blank" rel="noopener">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="dot"></span> Active
+          </div>
+          <div class="panel-body">
+            <div class="project-id">MISSION-001</div>
+            <h3 class="project-name">Musician Theory</h3>
+            <p class="project-desc">
+              Complete E-Music learning platform with full Academy management system. Built as a full-stack web application and hosted on AWS EC2.
+            </p>
+            <div class="project-tech">
+              <span>Full-stack</span>
+              <span>AWS EC2</span>
+              <span>Web Platform</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://github.com/yadhumanikandan/esp8266-wifi-hacking-device" target="_blank" rel="noopener">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="dot amber"></span> Public Repo
+          </div>
+          <div class="panel-body">
+            <div class="project-id">MISSION-002</div>
+            <h3 class="project-name">ESP8266 WiFi Hacking Device</h3>
+            <p class="project-desc">
+              An all-in-one WiFi hacking tool using ESP8266 with MicroPython. Hardware-based security research and testing device.
+            </p>
+            <div class="project-tech">
+              <span>ESP8266</span>
+              <span>MicroPython</span>
+              <span>WiFi Security</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://github.com/yadhumanikandan/secure-face-authentication-in-web" target="_blank" rel="noopener">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="dot"></span> Public Repo
+          </div>
+          <div class="panel-body">
+            <div class="project-id">MISSION-003</div>
+            <h3 class="project-name">Secure Face Authentication</h3>
+            <p class="project-desc">
+              Face authentication system for web applications. Biometric security implementation using Python for secure access control.
+            </p>
+            <div class="project-tech">
+              <span>Python</span>
+              <span>Face Recognition</span>
+              <span>Web Auth</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+      <a class="project-card reveal" href="https://github.com/yadhumanikandan/fake-HID-device-detector" target="_blank" rel="noopener">
+        <div class="panel">
+          <div class="panel-header">
+            <span class="dot"></span> Public Repo
+          </div>
+          <div class="panel-body">
+            <div class="project-id">MISSION-004</div>
+            <h3 class="project-name">Fake HID Device Detector</h3>
+            <p class="project-desc">
+              A program that detects USB Rubber Ducky-like devices. Security tool for identifying malicious HID attack hardware.
+            </p>
+            <div class="project-tech">
+              <span>Python</span>
+              <span>USB Security</span>
+              <span>HID Detection</span>
+            </div>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ EXPERIENCE ═══════════════════════ -->
+<section id="experience">
+  <div class="container">
+    <div class="section-label reveal">Mission Log</div>
+    <div class="timeline reveal">
+
+      <div class="timeline-entry">
+        <div class="timeline-date">December 2025 — Present</div>
+        <div class="timeline-role">Information Technology Network Support</div>
+        <div class="timeline-org">Taamul Credit Review Services</div>
+        <div class="timeline-location">Dubai, United Arab Emirates</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-date">August 2024 — September 2025</div>
+        <div class="timeline-role">System Administrator</div>
+        <div class="timeline-org">SDC Networks</div>
+        <div class="timeline-location">Ernakulam, India</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-date">January 2024 — January 2025</div>
+        <div class="timeline-role">Full-stack Developer</div>
+        <div class="timeline-org">Musician Theory</div>
+        <div class="timeline-location">Remote</div>
+      </div>
+
+      <div class="timeline-entry">
+        <div class="timeline-date">April 2024 — May 2024</div>
+        <div class="timeline-role">Cyber Security Intern</div>
+        <div class="timeline-org">ShadowFox</div>
+        <div class="timeline-location">Remote</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ CREDENTIALS ═══════════════════════ -->
+<section id="credentials">
+  <div class="container">
+    <div class="section-label reveal">Clearance Level</div>
+    <div class="certs-grid">
+
+      <div class="panel cert-badge reveal">
+        <div class="cert-icon">AWS</div>
+        <div class="cert-info">
+          <h4>AWS Certified Solutions Architect</h4>
+          <p>Associate — Amazon Web Services</p>
+        </div>
+      </div>
+
+      <div class="panel cert-badge reveal">
+        <div class="cert-icon">EHA</div>
+        <div class="cert-info">
+          <h4>Ethical Hacking Associate</h4>
+          <p>Certified Ethical Hacking</p>
+        </div>
+      </div>
+
+      <div class="panel cert-badge reveal">
+        <div class="cert-icon">THM</div>
+        <div class="cert-info">
+          <h4>Advent of Cyber 2021</h4>
+          <p>TryHackMe</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="section-label reveal" style="margin-top: 64px;">Training Log</div>
+    <div class="education-grid">
+
+      <div class="panel edu-badge reveal">
+        <div class="edu-icon">BSc</div>
+        <div class="edu-info">
+          <h4>BSc Cyber Forensic</h4>
+          <p>Mahatma Gandhi University — 2021 – 2024</p>
+        </div>
+      </div>
+
+      <div class="panel edu-badge reveal">
+        <div class="edu-icon">DIP</div>
+        <div class="edu-info">
+          <h4>Diploma in Cyber Security & Networking</h4>
+          <p>SDC Networks — May 2024 – July 2024</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ GITHUB ═══════════════════════ -->
+<section id="github">
+  <div class="container">
+    <div class="section-label reveal">Commit Frequency</div>
+    <div class="panel github-panel reveal">
+      <div class="panel-header">
+        <span class="dot"></span> Activity Log — github.com/yadhumanikandan
+      </div>
+      <div class="panel-body">
+        <div class="github-graph" id="github-graph">
+          <div class="github-loading">Loading contribution data...</div>
+        </div>
+        <div class="github-stats">
+          <div>Repos: <span class="stat-val">40+</span></div>
+          <div>Followers: <span class="stat-val">32</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════ CONTACT ═══════════════════════ -->
+<section id="contact">
+  <div class="container">
+    <div class="section-label reveal">Communications</div>
+    <div class="contact-terminal reveal">
+      <div class="terminal-bar">
+        <span class="terminal-dot r"></span>
+        <span class="terminal-dot y"></span>
+        <span class="terminal-dot g"></span>
+        <span class="terminal-title">yadhukrishnan@mission-ctrl ~ /comms</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-label">email</span>
+          <a href="mailto:yadhumanikandan0@gmail.com">yadhumanikandan0@gmail.com</a>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-label">github</span>
+          <a href="https://github.com/yadhumanikandan" target="_blank" rel="noopener">github.com/yadhumanikandan</a>
+        </div>
+        <div class="terminal-line">
+          <span class="terminal-prompt">$</span>
+          <span class="terminal-label">linkedin</span>
+          <a href="https://www.linkedin.com/in/yadhumanikandan" target="_blank" rel="noopener">linkedin.com/in/yadhumanikandan</a>
+        </div>
+        <div class="terminal-cursor-line">
+          <span class="terminal-prompt">$</span> <span class="cursor"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /main-content -->
+
+<footer>
+  <div class="container">
+    &copy; <span id="year"></span> Yadhukrishnan Manikandan — All systems nominal.
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   STARFIELD
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let w, h;
+
+  function resize() {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+
+  function createStars(count) {
+    stars = [];
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.2 + 0.2,
+        alpha: Math.random() * 0.5 + 0.1,
+        drift: (Math.random() - 0.5) * 0.15,
+        pulse: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.008 + 0.002
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, w, h);
+    for (let s of stars) {
+      s.pulse += s.pulseSpeed;
+      s.y += s.drift;
+      if (s.y > h) s.y = 0;
+      if (s.y < 0) s.y = h;
+
+      const flicker = s.alpha + Math.sin(s.pulse) * 0.15;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(180, 200, 240, ${Math.max(0, flicker)})`;
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createStars(200);
+  draw();
+
+  window.addEventListener('resize', () => {
+    resize();
+    createStars(200);
+  });
+})();
+
+/* ═══════════════════════════════════════════════════
+   TYPEWRITER
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const phrases = [
+    'Securing networks.',
+    'Deploying infrastructure.',
+    'Architecting cloud systems.',
+    'Integrating AI workflows.',
+    'Managing virtualization.',
+    'Building secure systems.',
+  ];
+  const el = document.getElementById('typewriter');
+  let phraseIdx = 0;
+  let charIdx = 0;
+  let deleting = false;
+
+  function tick() {
+    const current = phrases[phraseIdx];
+    if (!deleting) {
+      el.textContent = current.substring(0, charIdx + 1);
+      charIdx++;
+      if (charIdx === current.length) {
+        setTimeout(() => { deleting = true; tick(); }, 2200);
+        return;
+      }
+      setTimeout(tick, 60 + Math.random() * 40);
+    } else {
+      el.textContent = current.substring(0, charIdx);
+      charIdx--;
+      if (charIdx < 0) {
+        deleting = false;
+        charIdx = 0;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        setTimeout(tick, 400);
+        return;
+      }
+      setTimeout(tick, 30);
+    }
+  }
+
+  setTimeout(tick, 1200);
+})();
+
+/* ═══════════════════════════════════════════════════
+   UPTIME COUNTER
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const start = new Date('2002-01-01T00:00:00');
+  const el = document.getElementById('uptime');
+
+  function update() {
+    const now = new Date();
+    const diff = now - start;
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hrs = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins = Math.floor((diff / (1000 * 60)) % 60);
+    el.textContent = days + 'd ' + hrs + 'h ' + mins + 'm';
+  }
+
+  update();
+  setInterval(update, 60000);
+})();
+
+/* ═══════════════════════════════════════════════════
+   GITHUB CONTRIBUTION GRAPH
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const container = document.getElementById('github-graph');
+  const username = 'yadhumanikandan';
+  const colors = ['#1a1a2e', '#0a3d6b', '#1a5a9e', '#3a7fd4', '#4a9eff'];
+  const cellSize = 11;
+  const cellGap = 3;
+  const totalSize = cellSize + cellGap;
+
+  async function loadGraph() {
+    try {
+      const res = await fetch('https://github-contributions-api.jogruber.de/v4/' + username + '?y=last');
+      if (!res.ok) throw new Error('API error');
+      const data = await res.json();
+      renderGraph(data.contributions);
+    } catch (e) {
+      renderFallback();
+    }
+  }
+
+  function renderGraph(contributions) {
+    // Group contributions into weeks (columns)
+    const weeks = [];
+    let currentWeek = [];
+
+    for (let i = 0; i < contributions.length; i++) {
+      const day = contributions[i];
+      const date = new Date(day.date + 'T00:00:00');
+      const dayOfWeek = date.getDay();
+
+      if (dayOfWeek === 0 && currentWeek.length > 0) {
+        weeks.push(currentWeek);
+        currentWeek = [];
+      }
+      currentWeek.push({ ...day, dayOfWeek });
+    }
+    if (currentWeek.length > 0) weeks.push(currentWeek);
+
+    const svgWidth = weeks.length * totalSize + 2;
+    const svgHeight = 7 * totalSize + 2;
+
+    let rects = '';
+    weeks.forEach((week, wi) => {
+      week.forEach((day) => {
+        const x = wi * totalSize + 1;
+        const y = day.dayOfWeek * totalSize + 1;
+        const color = colors[Math.min(day.level, 4)];
+        rects += '<rect x="' + x + '" y="' + y + '" width="' + cellSize + '" height="' + cellSize + '" rx="2" ry="2" fill="' + color + '" data-date="' + day.date + '" data-count="' + day.count + '"><title>' + day.date + ': ' + day.count + ' contribution' + (day.count !== 1 ? 's' : '') + '</title></rect>';
+      });
+    });
+
+    container.innerHTML = '<svg width="' + svgWidth + '" height="' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">' + rects + '</svg>';
+  }
+
+  function renderFallback() {
+    // Generate a placeholder graph with random data as visual fallback
+    const weeks = 52;
+    const svgWidth = weeks * totalSize + 2;
+    const svgHeight = 7 * totalSize + 2;
+    let rects = '';
+
+    for (let w = 0; w < weeks; w++) {
+      for (let d = 0; d < 7; d++) {
+        const x = w * totalSize + 1;
+        const y = d * totalSize + 1;
+        const level = Math.random() < 0.6 ? 0 : Math.floor(Math.random() * 5);
+        rects += '<rect x="' + x + '" y="' + y + '" width="' + cellSize + '" height="' + cellSize + '" rx="2" ry="2" fill="' + colors[level] + '"></rect>';
+      }
+    }
+
+    container.innerHTML = '<svg width="' + svgWidth + '" height="' + svgHeight + '" xmlns="http://www.w3.org/2000/svg" style="max-width:100%;">' + rects + '</svg>';
+  }
+
+  loadGraph();
+})();
+
+/* ═══════════════════════════════════════════════════
+   SCROLL REVEAL
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  reveals.forEach(el => observer.observe(el));
+})();
+
+/* ═══════════════════════════════════════════════════
+   SKILL BAR ANIMATION
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const bars = document.querySelectorAll('.skill-bar-fill');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const w = entry.target.getAttribute('data-width');
+        entry.target.style.width = w + '%';
+      }
+    });
+  }, { threshold: 0.5 });
+
+  bars.forEach(bar => observer.observe(bar));
+})();
+
+/* ═══════════════════════════════════════════════════
+   MOBILE NAV TOGGLE
+   ═══════════════════════════════════════════════════ */
+(function() {
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+
+  toggle.addEventListener('click', () => {
+    links.classList.toggle('active');
+  });
+
+  links.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      links.classList.remove('active');
+    });
+  });
+})();
+
+/* ═══════════════════════════════════════════════════
+   FOOTER YEAR
+   ═══════════════════════════════════════════════════ */
+document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
 </html>
